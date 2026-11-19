@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>网页 SSTV 收图台</title>
+    <script type="module" crossorigin src="/assets/index-BC0gwwCv.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-B3pyykig.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>网页 SSTV 收图台</h1>
+      <div class="status-chips">
+        <span id="chip-phase" class="chip">待机</span>
+        <span id="chip-mode" class="chip">模式: -</span>
+        <span id="chip-snr" class="chip">SNR: -</span>
+        <span id="chip-dropout" class="chip hidden" title="信号中断,正在补全">⚠ 信号中断</span>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="panel receive-panel">
+        <div class="panel-head">
+          <h2>实时接收</h2>
+          <div class="controls">
+            <label class="control">
+              声卡输入
+              <select id="device-select"></select>
+            </label>
+            <button id="btn-start" class="primary">开始接收</button>
+            <button id="btn-stop" disabled>停止</button>
+            <button id="btn-reset">重置解码器</button>
+          </div>
+        </div>
+
+        <div class="canvas-wrap">
+          <canvas id="live-canvas" width="640" height="496"></canvas>
+          <div id="live-overlay" class="canvas-overlay">等待信号…</div>
+          <div class="progress-row">
+            <div class="progress-bar"><div id="progress-fill"></div></div>
+            <span id="progress-text">0 / 0 行</span>
+          </div>
+        </div>
+
+        <div class="guess-box" id="guess-box" hidden>
+          <span>未检测到 VIS,正在根据同步特征猜模式…</span>
+          <span id="guess-detail"></span>
+          <span id="guess-countdown"></span>
+        </div>
+      </section>
+
+      <section class="panel side-panel">
+        <div class="panel-head"><h2>测试信号发生器</h2></div>
+        <div class="test-controls">
+          <label class="control">模式
+            <select id="test-mode">
+              <option value="MARTIN1">Martin 1</option>
+              <option value="SCOTTIE1">Scottie 1</option>
+              <option value="ROBOT36">Robot 36</option>
+              <option value="PD120">PD120</option>
+            </select>
+          </label>
+          <label class="control">图样
+            <select id="test-pattern">
+              <option value="bars">彩条</option>
+              <option value="gradient">渐变</option>
+              <option value="grid">网格</option>
+            </select>
+          </label>
+          <label class="control">信噪比
+            <select id="test-snr">
+              <option value="30">30 dB(干净)</option>
+              <option value="20">20 dB</option>
+              <option value="10" selected>10 dB(弱信号)</option>
+              <option value="5">5 dB(极弱)</option>
+            </select>
+          </label>
+          <label class="control">断续
+            <select id="test-dropout">
+              <option value="none">无断续</option>
+              <option value="single" selected>单次 3 秒</option>
+              <option value="multi">多次 1~2 秒</option>
+            </select>
+          </label>
+          <button id="btn-test-play" class="primary">生成并送入解码器</button>
+        </div>
+
+        <div class="panel-head"><h2>本次会话图像</h2></div>
+        <div id="gallery" class="gallery"></div>
+      </section>
+    </main>
+
+    <section class="panel log-panel">
+      <div class="panel-head">
+        <h2>通联日志</h2>
+        <div class="controls">
+          <button id="btn-export-adif">导出 ADIF</button>
+          <button id="btn-clear-log">清空日志</button>
+        </div>
+      </div>
+      <table class="log-table">
+        <thead>
+          <tr>
+            <th>时间</th><th>呼号</th><th>模式</th><th>频率(MHz)</th>
+            <th>行数</th><th>补全</th><th>SNR</th><th>缩略图</th><th>操作</th>
+          </tr>
+        </thead>
+        <tbody id="log-tbody"></tbody>
+      </table>
+    </section>
+
+  </body>
+</html>
